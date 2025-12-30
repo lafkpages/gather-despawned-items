@@ -15,11 +15,19 @@ public class DespawnedItemsInventory implements Container {
     private final NonNullList<ItemStack> stacks;
 
     public DespawnedItemsInventory() {
-        this.stacks = NonNullList.withSize(MIN_SIZE, ItemStack.EMPTY);
+        this.stacks = NonNullList.create();
+
+        // Fill with empty stacks for chest GUI
+        for (int i = 0; i < MIN_SIZE; i++) {
+            stacks.add(ItemStack.EMPTY);
+        }
     }
 
     public DespawnedItemsInventory(NonNullList<ItemStack> itemStacks) {
-        this.stacks = itemStacks;
+        // Copy into a growable list
+        this.stacks = NonNullList.create();
+        this.stacks.addAll(itemStacks);
+
         // Ensure minimum size for chest GUI
         while (stacks.size() < MIN_SIZE) {
             stacks.add(ItemStack.EMPTY);

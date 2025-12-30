@@ -55,13 +55,28 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 		try (FileInputStream inventoryFileInputStream = new FileInputStream(inventoryFile);
 				DataInputStream inventoryFileDataInput = new DataInputStream(inventoryFileInputStream)) {
 			CompoundTag nbt = NbtIo.readCompressed(inventoryFileDataInput, NbtAccounter.unlimitedHeap());
-			NonNullList<ItemStack> inventoryItemStacks = NonNullList.create();
+
+			// ContainerHelper.loadAllItems needs a pre-sized list since it uses slot
+			// indices
+			// We need to determine the max slot index from the saved items
+			int size = DespawnedItemsInventory.MIN_SIZE;
+			if (nbt.contains("Items")) {
+				var itemsList = nbt.getListOrEmpty("Items");
+				for (int i = 0; i < itemsList.size(); i++) {
+					var itemTag = itemsList.getCompoundOrEmpty(i);
+					int slot = itemTag.getByteOr("Slot", (byte) 0) & 255;
+					size = Math.max(size, slot + 1);
+				}
+			}
+
+			NonNullList<ItemStack> inventoryItemStacks = NonNullList.withSize(size, ItemStack.EMPTY);
 			ContainerHelper.loadAllItems(TagValueInput.create(reporter, server.registryAccess(), nbt),
 					inventoryItemStacks);
+
 			inventory = new DespawnedItemsInventory(inventoryItemStacks);
 			inventory.optimise();
 		} catch (Exception e) {
-			LOGGER.error("Error while loading inventory: " + e);
+			LOGGER.error("Error while loading inventory: ", e);
 			inventory = new DespawnedItemsInventory();
 		}
 	}
