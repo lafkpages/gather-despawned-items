@@ -58,15 +58,9 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 
 			// ContainerHelper.loadAllItems needs a pre-sized list since it uses slot
 			// indices
-			// We need to determine the max slot index from the saved items
 			int size = DespawnedItemsInventory.MIN_SIZE;
 			if (nbt.contains("Items")) {
-				var itemsList = nbt.getListOrEmpty("Items");
-				for (int i = 0; i < itemsList.size(); i++) {
-					var itemTag = itemsList.getCompoundOrEmpty(i);
-					int slot = itemTag.getByteOr("Slot", (byte) 0) & 255;
-					size = Math.max(size, slot + 1);
-				}
+				size = Math.max(size, nbt.getListOrEmpty("Items").size());
 			}
 
 			NonNullList<ItemStack> inventoryItemStacks = NonNullList.withSize(size, ItemStack.EMPTY);
@@ -74,7 +68,7 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 					inventoryItemStacks);
 
 			inventory = new DespawnedItemsInventory(inventoryItemStacks);
-			inventory.optimise();
+
 		} catch (Exception e) {
 			LOGGER.error("Error while loading inventory: ", e);
 			inventory = new DespawnedItemsInventory();
@@ -83,6 +77,8 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 
 	public static void saveInventory(MinecraftServer server) {
 		File inventoryFile = getInventoryFile(server);
+
+		inventory.optimise();
 
 		TagValueOutput output = TagValueOutput.createWithContext(reporter, server.registryAccess());
 		ContainerHelper.saveAllItems(output, inventory.getList());
@@ -104,7 +100,6 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 
 	public void onEndTick(MinecraftServer server) {
 		if (--ticksUntilSave <= 0) {
-			inventory.optimise();
 			saveInventory(server);
 			ticksUntilSave = SAVE_INTERVAL_TICKS;
 		}
