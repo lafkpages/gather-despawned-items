@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "luisafk.gatherdespawneditems.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": ["EntityMixin", "ItemEntityAccessor"],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
