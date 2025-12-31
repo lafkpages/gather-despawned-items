@@ -29,7 +29,6 @@ import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.level.storage.TagValueInput;
@@ -143,7 +142,7 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 		try {
 			player.openMenu(
 					new SimpleMenuProvider(
-							(i, playerInventory, playerEntity) -> new ChestMenu(config.screenHandlerType(),
+							(i, playerInventory, playerEntity) -> new ReadOnlyChestMenu(config.screenHandlerType(),
 									i, playerInventory, inventory, config.inventoryRows),
 							Component.nullToEmpty(config.inventoryName)));
 		} catch (Exception e) {

@@ -85,6 +85,15 @@ public class DespawnedItemsInventory implements Container {
         stacks.clear();
     }
 
+    /**
+     * Prevents players from placing items into this inventory.
+     * The mod can still add items internally via addItem().
+     */
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        return false;
+    }
+
     public boolean addItem(ItemStack itemStack) {
         itemStack = itemStack.copy();
 
