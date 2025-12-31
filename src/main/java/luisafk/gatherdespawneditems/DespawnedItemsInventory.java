@@ -95,7 +95,7 @@ public class DespawnedItemsInventory implements Container {
                 stacks.set(i, itemStack);
                 return true;
             } else if (ItemStack.isSameItemSameComponents(itemStack, currentStack)) {
-                int maxStackSize = Math.min(currentStack.getMaxStackSize(), this.getMaxStackSize());
+                int maxStackSize = this.getMaxStackSize(currentStack);
 
                 // Skip if this stack is already full
                 if (currentStack.getCount() >= maxStackSize) {
@@ -121,7 +121,7 @@ public class DespawnedItemsInventory implements Container {
 
         // No empty slot found, append new stacks to the end (infinite growth)
         while (itemStack.getCount() > 0) {
-            int maxStackSize = Math.min(itemStack.getMaxStackSize(), this.getMaxStackSize());
+            int maxStackSize = this.getMaxStackSize(itemStack);
             int toAdd = Math.min(itemStack.getCount(), maxStackSize);
 
             ItemStack newStack = itemStack.copy();
