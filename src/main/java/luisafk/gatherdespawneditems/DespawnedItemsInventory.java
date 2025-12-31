@@ -63,7 +63,6 @@ public class DespawnedItemsInventory implements Container {
 
     public ItemStack removeItem(int i, int j) {
         ItemStack itemStack = ContainerHelper.removeItem(this.stacks, i, j);
-
         return itemStack;
     }
 
