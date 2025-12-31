@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import luisafk.gatherdespawneditems.config.Config;
+import luisafk.gatherdespawneditems.config.ConfigManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -28,7 +30,6 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.level.storage.TagValueInput;
@@ -46,8 +47,8 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 
 	private static DespawnedItemsInventory inventory;
 
-	private static final int SAVE_INTERVAL_TICKS = 20 * 60; // Save every minute
-	private int ticksUntilSave = SAVE_INTERVAL_TICKS - 10;
+	private int ticksUntilSave;
+	private static Config config;
 
 	public void onServerStarted(MinecraftServer server) {
 		File inventoryFile = getInventoryFile(server);
@@ -101,12 +102,15 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 	public void onEndTick(MinecraftServer server) {
 		if (--ticksUntilSave <= 0) {
 			saveInventory(server);
-			ticksUntilSave = SAVE_INTERVAL_TICKS;
+			ticksUntilSave = config.autosaveSeconds * 20;
 		}
 	}
 
 	@Override
 	public void onInitialize() {
+		config = ConfigManager.load();
+		ticksUntilSave = config.autosaveSeconds * 20 - 10;
+
 		ServerLifecycleEvents.SERVER_STARTED.register(this);
 		ServerLifecycleEvents.SERVER_STOPPING.register(this);
 		ServerTickEvents.END_SERVER_TICK.register(this);
@@ -138,8 +142,10 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 	public static void openDespawnedItemsInventory(Player player) {
 		try {
 			player.openMenu(
-					new SimpleMenuProvider((i, playerInventory, playerEntity) -> new ChestMenu(MenuType.GENERIC_9x6,
-							i, playerInventory, inventory, 6), Component.nullToEmpty("Despawned Items")));
+					new SimpleMenuProvider(
+							(i, playerInventory, playerEntity) -> new ChestMenu(config.screenHandlerType(),
+									i, playerInventory, inventory, config.inventoryRows),
+							Component.nullToEmpty(config.inventoryName)));
 		} catch (Exception e) {
 			LOGGER.error("Error opening despawned items inventory: ", e);
 			player.displayClientMessage(Component.literal("Error opening inventory: " + e.getMessage()), false);
