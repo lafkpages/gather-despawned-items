@@ -1,5 +1,6 @@
 package luisafk.gatherdespawneditems;
 
+import java.util.Collections;
 import java.util.Iterator;
 
 import net.minecraft.core.NonNullList;
@@ -205,5 +206,12 @@ public class DespawnedItemsInventory implements Container {
         }
 
         return didOptimise;
+    }
+
+    /**
+     * Shuffles the inventory items randomly (non-destructive).
+     */
+    public void shuffle() {
+        Collections.shuffle(stacks);
     }
 }

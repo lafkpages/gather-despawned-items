@@ -133,6 +133,13 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 
 								return 1;
 							}));
+
+			dispatcher.register(Commands.literal("despawneditems:shuffle")
+					.requires(source -> source.hasPermission(config.shuffleCommandPermissionLevel))
+					.executes(context -> {
+						context.getSource().sendFailure(Component.literal("TODO :)"));
+						return 1;
+					}));
 		});
 
 		LOGGER.info("Gather Despawned Items initialized!");
