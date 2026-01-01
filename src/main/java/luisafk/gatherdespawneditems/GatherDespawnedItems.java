@@ -167,7 +167,7 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 		}
 	}
 
-	public static void addItemToInventory(ItemStack itemStack) {
+	public static void gatherDespawnedItem(ItemStack itemStack) {
 		boolean success = inventory.addItem(itemStack);
 
 		if (!success) {

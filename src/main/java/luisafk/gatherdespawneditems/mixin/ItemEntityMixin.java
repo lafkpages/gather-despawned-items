@@ -25,6 +25,6 @@ public class ItemEntityMixin {
             return;
         }
 
-        GatherDespawnedItems.addItemToInventory(self.getItem());
+        GatherDespawnedItems.gatherDespawnedItem(self.getItem());
     }
 }
