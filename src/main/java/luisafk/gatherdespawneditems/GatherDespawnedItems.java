@@ -174,7 +174,7 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 	public static void gatherDespawnedItem(ItemStack itemStack) {
 		if (config.broadcastItemDespawns) {
 			server.getPlayerList().broadcastSystemMessage(
-					Component.literal("Despawned item gathered: ").append(itemStack.getStyledHoverName()), false);
+					Component.literal("Despawned item gathered: ").append(itemStack.getDisplayName()), false);
 		}
 
 		boolean success = inventory.addItem(itemStack);
