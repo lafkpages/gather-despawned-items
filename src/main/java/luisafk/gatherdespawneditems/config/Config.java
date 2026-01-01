@@ -8,6 +8,7 @@ public class Config {
     public int inventoryRows = 6;
     public String inventoryName = "Despawned Items";
 
+    public int optimiseCommandPermissionLevel = 1;
     public int shuffleCommandPermissionLevel = 1;
 
     public MenuType<ChestMenu> screenHandlerType() {

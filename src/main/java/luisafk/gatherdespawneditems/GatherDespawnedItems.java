@@ -122,7 +122,8 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 			}));
 
 			dispatcher
-					.register(Commands.literal("despawneditems:optimise").requires(source -> source.hasPermission(1))
+					.register(Commands.literal("despawneditems:optimise")
+							.requires(source -> source.hasPermission(config.optimiseCommandPermissionLevel))
 							.executes(context -> {
 								boolean didOptimise = inventory.optimise();
 
