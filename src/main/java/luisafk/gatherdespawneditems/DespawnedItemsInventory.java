@@ -17,11 +17,7 @@ public class DespawnedItemsInventory implements Container {
 
     public DespawnedItemsInventory() {
         this.stacks = NonNullList.create();
-
-        // Fill with empty stacks for chest GUI
-        for (int i = 0; i < MIN_SIZE; i++) {
-            stacks.add(ItemStack.EMPTY);
-        }
+        ensureMinSize();
     }
 
     public DespawnedItemsInventory(NonNullList<ItemStack> itemStacks) {
@@ -29,8 +25,21 @@ public class DespawnedItemsInventory implements Container {
         this.stacks = NonNullList.create();
         this.stacks.addAll(itemStacks);
 
-        // Ensure minimum size for chest GUI
-        while (stacks.size() < MIN_SIZE) {
+        ensureMinSize();
+    }
+
+    /**
+     * Ensure minimum size for chest GUI
+     */
+    private void ensureMinSize() {
+        int size = stacks.size();
+        int needed = MIN_SIZE - size;
+
+        if (needed <= 0) {
+            return;
+        }
+
+        for (int i = 0; i < needed; i++) {
             stacks.add(ItemStack.EMPTY);
         }
     }
@@ -84,6 +93,7 @@ public class DespawnedItemsInventory implements Container {
 
     public void clearContent() {
         stacks.clear();
+        ensureMinSize();
     }
 
     /**
@@ -199,10 +209,7 @@ public class DespawnedItemsInventory implements Container {
             stacks.clear();
             stacks.addAll(compacted);
 
-            // Ensure minimum size for chest GUI
-            while (stacks.size() < MIN_SIZE) {
-                stacks.add(ItemStack.EMPTY);
-            }
+            ensureMinSize();
         }
 
         return didOptimise;
