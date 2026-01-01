@@ -5,6 +5,7 @@ import net.minecraft.world.inventory.MenuType;
 
 public class Config {
     public int autosaveSeconds = 60;
+    public int autoShuffleSeconds = 300;
     public int inventoryRows = 6;
     public String inventoryName = "Despawned Items";
 

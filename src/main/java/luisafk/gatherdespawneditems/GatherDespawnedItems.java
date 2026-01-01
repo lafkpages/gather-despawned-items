@@ -47,6 +47,8 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 	private static DespawnedItemsInventory inventory;
 
 	private int ticksUntilSave;
+	private int ticksUntilShuffle;
+
 	private static Config config;
 
 	public void onServerStarted(MinecraftServer server) {
@@ -103,12 +105,18 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 			saveInventory(server);
 			ticksUntilSave = config.autosaveSeconds * 20;
 		}
+
+		if (config.autoShuffleSeconds > 0 && --ticksUntilShuffle <= 0) {
+			inventory.shuffle();
+			ticksUntilShuffle = config.autoShuffleSeconds * 20;
+		}
 	}
 
 	@Override
 	public void onInitialize() {
 		config = ConfigManager.load();
 		ticksUntilSave = config.autosaveSeconds * 20 - 10;
+		ticksUntilShuffle = config.autoShuffleSeconds * 20 - 5;
 
 		ServerLifecycleEvents.SERVER_STARTED.register(this);
 		ServerLifecycleEvents.SERVER_STOPPING.register(this);
