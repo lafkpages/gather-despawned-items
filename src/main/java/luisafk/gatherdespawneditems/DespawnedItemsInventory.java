@@ -212,6 +212,7 @@ public class DespawnedItemsInventory implements Container {
      * Shuffles the inventory items randomly (non-destructive).
      */
     public void shuffle() {
+        optimise();
         Collections.shuffle(stacks);
     }
 }
