@@ -138,7 +138,7 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 			dispatcher.register(Commands.literal("despawneditems:shuffle")
 					.requires(source -> source.hasPermission(config.shuffleCommandPermissionLevel))
 					.executes(context -> {
-						context.getSource().sendFailure(Component.literal("TODO :)"));
+						inventory.shuffle();
 						return 1;
 					}));
 		});
