@@ -44,6 +44,8 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 
 	private static final ProblemReporter reporter = new ProblemReporter.ScopedCollector(LOGGER);
 
+	private static MinecraftServer server;
+
 	private static DespawnedItemsInventory inventory;
 
 	private int ticksUntilSave;
@@ -52,6 +54,8 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 	private static Config config;
 
 	public void onServerStarted(MinecraftServer server) {
+		GatherDespawnedItems.server = server;
+
 		File inventoryFile = getInventoryFile(server);
 
 		try (FileInputStream inventoryFileInputStream = new FileInputStream(inventoryFile);
@@ -168,6 +172,11 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 	}
 
 	public static void gatherDespawnedItem(ItemStack itemStack) {
+		if (config.broadcastItemDespawns) {
+			server.getPlayerList().broadcastSystemMessage(
+					Component.literal("Despawned item gathered: ").append(itemStack.getStyledHoverName()), false);
+		}
+
 		boolean success = inventory.addItem(itemStack);
 
 		if (!success) {
