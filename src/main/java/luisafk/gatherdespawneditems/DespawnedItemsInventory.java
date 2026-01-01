@@ -105,7 +105,7 @@ public class DespawnedItemsInventory implements Container {
         return false;
     }
 
-    public boolean addItem(ItemStack itemStack) {
+    public void addItem(ItemStack itemStack) {
         itemStack = itemStack.copy();
 
         for (int i = 0; i < stacks.size(); i++) {
@@ -113,7 +113,7 @@ public class DespawnedItemsInventory implements Container {
 
             if (currentStack.isEmpty()) {
                 stacks.set(i, itemStack);
-                return true;
+                return;
             } else if (ItemStack.isSameItemSameComponents(itemStack, currentStack)) {
                 int maxStackSize = this.getMaxStackSize(currentStack);
 
@@ -126,7 +126,7 @@ public class DespawnedItemsInventory implements Container {
 
                 if (combinedCount <= maxStackSize) {
                     currentStack.setCount(combinedCount);
-                    return true;
+                    return;
                 } else {
                     currentStack.setCount(maxStackSize);
 
@@ -151,7 +151,7 @@ public class DespawnedItemsInventory implements Container {
             itemStack.setCount(itemStack.getCount() - toAdd);
         }
 
-        return true;
+        return;
     }
 
     /**

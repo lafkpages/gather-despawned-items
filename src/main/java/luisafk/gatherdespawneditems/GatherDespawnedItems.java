@@ -177,13 +177,7 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 					Component.literal("Despawned item gathered: ").append(itemStack.getDisplayName()), false);
 		}
 
-		boolean success = inventory.addItem(itemStack);
-
-		if (!success) {
-			// Broadcast chat message
-			// TODO
-			LOGGER.info("Despawned Items inventory full, could not gather item: " + itemStack);
-		}
+		inventory.addItem(itemStack);
 	}
 
 	private static File getInventoryFile(MinecraftServer server) {
