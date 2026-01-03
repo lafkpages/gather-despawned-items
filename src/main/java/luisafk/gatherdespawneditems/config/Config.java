@@ -8,7 +8,9 @@ public class Config {
     public int autoShuffleSeconds = 300;
     public int inventoryRows = 6;
     public String inventoryName = "Despawned Items";
+
     public boolean broadcastItemDespawns = true;
+    public boolean broadcastTakenItems = true;
 
     public int optimiseCommandPermissionLevel = 1;
     public int shuffleCommandPermissionLevel = 1;

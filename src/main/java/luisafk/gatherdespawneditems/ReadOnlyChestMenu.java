@@ -15,19 +15,31 @@ import net.minecraft.world.item.ItemStack;
 public class ReadOnlyChestMenu extends AbstractContainerMenu {
     private final Container container;
     private final int containerRows;
+    private final ItemTakenCallback onItemTaken;
+
+    @FunctionalInterface
+    public interface ItemTakenCallback {
+        void onItemTaken(Player player, ItemStack itemStack);
+    }
 
     public ReadOnlyChestMenu(MenuType<?> menuType, int syncId, Inventory playerInventory, Container container,
             int rows) {
+        this(menuType, syncId, playerInventory, container, rows, null);
+    }
+
+    public ReadOnlyChestMenu(MenuType<?> menuType, int syncId, Inventory playerInventory, Container container,
+            int rows, ItemTakenCallback onItemTaken) {
         super(menuType, syncId);
         checkContainerSize(container, rows * 9);
         this.container = container;
         this.containerRows = rows;
+        this.onItemTaken = onItemTaken;
         container.startOpen(playerInventory.player);
 
         // Add container slots with read-only behavior
         for (int row = 0; row < rows; ++row) {
             for (int col = 0; col < 9; ++col) {
-                this.addSlot(new ReadOnlySlot(container, col + row * 9, 8 + col * 18, 18 + row * 18));
+                this.addSlot(new ReadOnlySlot(container, col + row * 9, 8 + col * 18, 18 + row * 18, this));
             }
         }
 
@@ -54,8 +66,20 @@ public class ReadOnlyChestMenu extends AbstractContainerMenu {
 
             if (slotIndex < containerSlots) {
                 // Moving from container to player inventory - ALLOWED
+
+                ItemStack takenCopy = slotStack.copy(); // Copy before move
+
                 if (!this.moveItemStackTo(slotStack, containerSlots, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
+                }
+
+                // Broadcast that items were taken
+                if (onItemTaken != null) {
+                    int takenCount = takenCopy.getCount() - slotStack.getCount();
+                    if (takenCount > 0) {
+                        takenCopy.setCount(takenCount);
+                        onItemTaken.onItemTaken(player, takenCopy);
+                    }
                 }
             } else {
                 // Moving from player inventory to container - BLOCKED
@@ -90,13 +114,24 @@ public class ReadOnlyChestMenu extends AbstractContainerMenu {
      * A slot that only allows taking items, not placing them.
      */
     private static class ReadOnlySlot extends Slot {
-        public ReadOnlySlot(Container container, int slot, int x, int y) {
+        private final ReadOnlyChestMenu menu;
+
+        public ReadOnlySlot(Container container, int slot, int x, int y, ReadOnlyChestMenu menu) {
             super(container, slot, x, y);
+            this.menu = menu;
         }
 
         @Override
         public boolean mayPlace(ItemStack stack) {
             return false; // Never allow placing items
+        }
+
+        @Override
+        public void onTake(Player player, ItemStack stack) {
+            super.onTake(player, stack);
+            if (menu.onItemTaken != null) {
+                menu.onItemTaken.onItemTaken(player, stack);
+            }
         }
     }
 }

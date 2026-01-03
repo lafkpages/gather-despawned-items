@@ -163,11 +163,24 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 			player.openMenu(
 					new SimpleMenuProvider(
 							(i, playerInventory, playerEntity) -> new ReadOnlyChestMenu(config.screenHandlerType(),
-									i, playerInventory, inventory, config.inventoryRows),
+									i, playerInventory, inventory, config.inventoryRows,
+									GatherDespawnedItems::onItemTakenFromInventory),
 							Component.nullToEmpty(config.inventoryName)));
 		} catch (Exception e) {
 			LOGGER.error("Error opening despawned items inventory: ", e);
 			player.displayClientMessage(Component.literal("Error opening inventory: " + e.getMessage()), false);
+		}
+	}
+
+	private static void onItemTakenFromInventory(Player player, ItemStack itemStack) {
+		if (config.broadcastTakenItems) {
+			server.getPlayerList().broadcastSystemMessage(
+					Component.empty()
+							.append(player.getDisplayName())
+							.append(Component.literal(" retrieved "))
+							.append(itemStack.getDisplayName())
+							.append(Component.literal(" from despawned items")),
+					false);
 		}
 	}
 
