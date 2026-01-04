@@ -1,6 +1,5 @@
 package luisafk.gatherdespawneditems.config;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.world.inventory.ChestMenu;
@@ -12,7 +11,7 @@ public class Config {
     public int inventoryRows = 6;
     public String inventoryName = "Despawned Items";
 
-    public List<String> excludedItems = new ArrayList<>();
+    public List<String> excludedItems = List.of("minecraft:egg", "minecraft:blue_egg", "minecraft:brown_egg");
 
     public boolean broadcastItemDespawns = true;
     public boolean broadcastTakenItems = true;
