@@ -8,6 +8,7 @@
   "contact": {
     "sources": "https://github.com/lafkpages/gather-despawned-items"
   },
+  "license": "All Rights Reserved",
   "icon": "assets/icon.png",
   "environment": "server",
   "entrypoints": {
