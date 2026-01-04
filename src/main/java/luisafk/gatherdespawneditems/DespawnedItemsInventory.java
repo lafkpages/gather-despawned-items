@@ -1,7 +1,6 @@
 package luisafk.gatherdespawneditems;
 
 import java.util.Collections;
-import java.util.Iterator;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
@@ -53,18 +52,7 @@ public class DespawnedItemsInventory implements Container {
     }
 
     public boolean isEmpty() {
-        Iterator<ItemStack> stacksIterator = this.stacks.iterator();
-
-        ItemStack currentItemStack;
-        do {
-            if (!stacksIterator.hasNext()) {
-                return true;
-            }
-
-            currentItemStack = (ItemStack) stacksIterator.next();
-        } while (currentItemStack.isEmpty());
-
-        return false;
+        return stacks.stream().allMatch(ItemStack::isEmpty);
     }
 
     public ItemStack getItem(int i) {
@@ -72,8 +60,7 @@ public class DespawnedItemsInventory implements Container {
     }
 
     public ItemStack removeItem(int i, int j) {
-        ItemStack itemStack = ContainerHelper.removeItem(this.stacks, i, j);
-        return itemStack;
+        return ContainerHelper.removeItem(this.stacks, i, j);
     }
 
     public ItemStack removeItemNoUpdate(int i) {

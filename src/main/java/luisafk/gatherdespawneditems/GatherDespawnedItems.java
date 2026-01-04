@@ -50,7 +50,7 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 
 	private int ticksUntilSave;
 	private int ticksUntilShuffle;
-	private static int ticksUntilOptimise;
+	private static volatile boolean pendingOptimise;
 
 	private static Config config;
 
@@ -97,7 +97,7 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 			inventoryFile.createNewFile();
 			NbtIo.writeCompressed(nbt, inventoryFileDataOutput);
 		} catch (Exception e) {
-			LOGGER.error("Error while saving inventory: " + e);
+			LOGGER.error("Error while saving inventory: ", e);
 		}
 	}
 
@@ -116,7 +116,8 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 			ticksUntilShuffle = config.autoShuffleSeconds * 20;
 		}
 
-		if (ticksUntilOptimise > 0 && --ticksUntilOptimise == 0) {
+		if (pendingOptimise) {
+			pendingOptimise = false;
 			inventory.optimise();
 		}
 	}
@@ -124,6 +125,9 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 	@Override
 	public void onInitialize() {
 		config = ConfigManager.load();
+
+		// Offset initial ticks to stagger operations and avoid all running on the same
+		// tick
 		ticksUntilSave = config.autosaveSeconds * 20 - 10;
 		ticksUntilShuffle = config.autoShuffleSeconds * 20 - 5;
 
@@ -188,7 +192,7 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 					false);
 		}
 
-		ticksUntilOptimise = 1;
+		pendingOptimise = true;
 	}
 
 	public static void gatherDespawnedItem(ItemStack itemStack) {
