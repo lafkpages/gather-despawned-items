@@ -1,5 +1,8 @@
 package luisafk.gatherdespawneditems.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 
@@ -8,6 +11,8 @@ public class Config {
     public int autoShuffleSeconds = 300;
     public int inventoryRows = 6;
     public String inventoryName = "Despawned Items";
+
+    public List<String> excludedItems = new ArrayList<>();
 
     public boolean broadcastItemDespawns = true;
     public boolean broadcastTakenItems = true;

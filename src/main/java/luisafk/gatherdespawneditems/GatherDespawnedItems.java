@@ -20,6 +20,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.EndTick;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
@@ -199,6 +200,12 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 		if (config.broadcastItemDespawns) {
 			server.getPlayerList().broadcastSystemMessage(
 					Component.literal("Despawned item gathered: ").append(itemStack.getDisplayName()), false);
+		}
+
+		String itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString();
+
+		if (config.excludedItems.contains(itemId)) {
+			return;
 		}
 
 		inventory.addItem(itemStack);
