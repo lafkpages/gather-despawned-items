@@ -197,11 +197,6 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 	}
 
 	public static void gatherDespawnedItem(ItemStack itemStack) {
-		if (config.broadcastItemDespawns) {
-			server.getPlayerList().broadcastSystemMessage(
-					Component.literal("Despawned item gathered: ").append(itemStack.getDisplayName()), false);
-		}
-
 		String itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString();
 
 		if (config.isItemExcluded(itemId)) {
@@ -209,6 +204,11 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 		}
 
 		inventory.addItem(itemStack);
+
+		if (config.broadcastItemDespawns) {
+			server.getPlayerList().broadcastSystemMessage(
+					Component.literal("Despawned item gathered: ").append(itemStack.getDisplayName()), false);
+		}
 	}
 
 	private static File getInventoryFile(MinecraftServer server) {
