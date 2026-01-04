@@ -204,9 +204,23 @@ public class DespawnedItemsInventory implements Container {
 
     /**
      * Shuffles the inventory items randomly (non-destructive).
+     * Only shuffles non-empty slots, keeping empties at the end.
      */
     public void shuffle() {
         optimise();
-        Collections.shuffle(stacks);
+
+        // Find the last non-empty index
+        int lastNonEmpty = -1;
+        for (int i = stacks.size() - 1; i >= 0; i--) {
+            if (!stacks.get(i).isEmpty()) {
+                lastNonEmpty = i;
+                break;
+            }
+        }
+
+        // Only shuffle the non-empty portion
+        if (lastNonEmpty > 0) {
+            Collections.shuffle(stacks.subList(0, lastNonEmpty + 1));
+        }
     }
 }
