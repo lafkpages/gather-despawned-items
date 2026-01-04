@@ -3,7 +3,7 @@
   "id": "gather-despawned-items",
   "version": "${version}",
   "name": "Gather Despawned Items",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "Gathers items that despawn into a globally available inventory!",
   "authors": ["LuisAFK"],
   "contact": {
     "sources": "https://github.com/lafkpages/gather-despawned-items"
