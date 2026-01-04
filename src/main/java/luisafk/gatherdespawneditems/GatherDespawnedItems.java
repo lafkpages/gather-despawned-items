@@ -50,6 +50,7 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 
 	private int ticksUntilSave;
 	private int ticksUntilShuffle;
+	private static int ticksUntilOptimise;
 
 	private static Config config;
 
@@ -113,6 +114,10 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 		if (config.autoShuffleSeconds > 0 && --ticksUntilShuffle <= 0) {
 			inventory.shuffle();
 			ticksUntilShuffle = config.autoShuffleSeconds * 20;
+		}
+
+		if (ticksUntilOptimise > 0 && --ticksUntilOptimise == 0) {
+			inventory.optimise();
 		}
 	}
 
@@ -182,6 +187,8 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 							.append(Component.literal(" from despawned items")),
 					false);
 		}
+
+		ticksUntilOptimise = 1;
 	}
 
 	public static void gatherDespawnedItem(ItemStack itemStack) {
