@@ -204,7 +204,7 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 
 		String itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString();
 
-		if (config.excludedItems.contains(itemId)) {
+		if (config.isItemExcluded(itemId)) {
 			return;
 		}
 
