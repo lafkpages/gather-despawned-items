@@ -3,7 +3,7 @@
   "id": "gather-despawned-items",
   "version": "${version}",
   "name": "Gather Despawned Items",
-  "description": "Gathers items that despawn into a globally available inventory!",
+  "description": "Never lose despawned items again! Gathers them into a shared inventory.",
   "authors": ["LuisAFK"],
   "contact": {
     "sources": "https://github.com/lafkpages/gather-despawned-items"
