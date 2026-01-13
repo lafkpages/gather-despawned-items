@@ -6,6 +6,8 @@ Ever thrown away flint, seeds, or other "common" items only to need them later? 
 
 Gathers items that despawn into a globally available inventory that can be opened with the `/despawneditems` command. Items can't be placed in this inventory, only taken out.
 
+![Despawned Items inventory GUI full of recovered items](https://cdn.modrinth.com/data/DwKYoqTO/images/dea3e0f0b123b45aca4f48c266e2884eceff1511_350.webp)
+
 ## Configuration
 
 The config file is located at `config/gatherdespawneditems.json` on the server.
