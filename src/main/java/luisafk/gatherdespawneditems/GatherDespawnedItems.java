@@ -26,6 +26,8 @@ import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionLevel;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleMenuProvider;
@@ -145,7 +147,9 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 
 			dispatcher
 					.register(Commands.literal("despawneditems:optimise")
-							.requires(source -> source.hasPermission(config.optimiseCommandPermissionLevel))
+							.requires(source -> source.permissions()
+									.hasPermission(new Permission.HasCommandLevel(
+											PermissionLevel.byId(config.optimiseCommandPermissionLevel))))
 							.executes(context -> {
 								boolean didOptimise = inventory.optimise();
 
@@ -158,7 +162,8 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 							}));
 
 			dispatcher.register(Commands.literal("despawneditems:shuffle")
-					.requires(source -> source.hasPermission(config.shuffleCommandPermissionLevel))
+					.requires(source -> source.permissions().hasPermission(
+							new Permission.HasCommandLevel(PermissionLevel.byId(config.shuffleCommandPermissionLevel))))
 					.executes(context -> {
 						inventory.shuffle();
 						return 1;
