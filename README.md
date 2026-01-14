@@ -23,3 +23,10 @@ The config file is located at `config/gatherdespawneditems.json` on the server.
 | `broadcastTakenItems`            | `true`                     | Announce in chat when players take items from the inventory                      |
 | `optimiseCommandPermissionLevel` | `1`                        | Permission level required for `/despawneditems:optimise`                         |
 | `shuffleCommandPermissionLevel`  | `1`                        | Permission level required for `/despawneditems:shuffle`                          |
+
+## Roadmap
+
+Some ideas I'm considering for future versions:
+
+- **Infinite stacking UI** - Break normal Minecraft chest mechanics to show an inventory with unlimited stack sizes. Clicking a "super-stack" would open a secondary chest with regular stacks of just that item type. This would help when large quantities of items accumulate.
+- **XP or economy cost** - Require XP to retrieve items, or integrate with economy mods to add a cost for recovering despawned items.
