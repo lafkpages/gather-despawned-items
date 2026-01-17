@@ -30,3 +30,4 @@ Some ideas I'm considering for future versions:
 
 - **Infinite stacking UI** - Break normal Minecraft chest mechanics to show an inventory with unlimited stack sizes. Clicking a "super-stack" would open a secondary chest with regular stacks of just that item type. This would help when large quantities of items accumulate.
 - **XP or economy cost** - Require XP to retrieve items, or integrate with economy mods to add a cost for recovering despawned items.
+- Gather items from The Void
