@@ -183,7 +183,7 @@ public class GatherDespawnedItems implements ModInitializer, ServerStarted, Serv
 							Component.nullToEmpty(config.inventoryName)));
 		} catch (Exception e) {
 			LOGGER.error("Error opening despawned items inventory: ", e);
-			player.displayClientMessage(Component.literal("Error opening inventory: " + e.getMessage()), false);
+			player.sendSystemMessage(Component.literal("Error opening inventory: " + e.getMessage()));
 		}
 	}
 
